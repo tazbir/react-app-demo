@@ -3,7 +3,7 @@ import '../css/App.css';
 import AddAppointments from './AddAppointments';
 import ListAppointments from './ListAppointments';
 import SearchAppointments from './SearchAppointments';
-import { without } from 'lodash'
+import { without,findIndex } from 'lodash'
 
 class App extends Component {
 
@@ -22,8 +22,19 @@ class App extends Component {
     this.toggleForm = this.toggleForm.bind(this);
     this.changeOrder = this.changeOrder.bind(this);
     this.searchApts = this.searchApts.bind(this);
+    this.updateInfo = this.updateInfo.bind(this);
   }
 
+  updateInfo(name,value,id){
+    let tempApts= this.state.myAppointments;
+    let aptIndex = findIndex(this.state.myAppointments,{
+      aptid:id
+    });
+    tempApts[aptIndex][name] = value;
+    this.setState({
+      myAppointments:tempApts
+    })
+  }
   searchApts(query){
     this.setState({queryText:query})
   }
@@ -112,7 +123,7 @@ class App extends Component {
               <div className="container">
                 <AddAppointments formDisplay={this.state.formDisplay} toggleForm={this.toggleForm} addAppointment={this.addAppointment} />
                 <SearchAppointments orderBy={this.state.orderBy} orderDir={this.state.orderDir} changeOrder={this.changeOrder} searchApts={this.searchApts} />
-                <ListAppointments appointments={filteredApts} deleteAppointment={this.deleteAppointment} />
+                <ListAppointments appointments={filteredApts} deleteAppointment={this.deleteAppointment} updateInfo={this.updateInfo}  />
               </div>
             </div>
           </div>
